@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oficina Rápida — Pedro Daniel Nhacale</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4f6;--card:#fff;--ink:#16222c;--soft:#5b6b78;--blue:#1f5fff;--line:#d5dbe0;--ok:#14803c;--err:#b3261e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101820;--card:#18232d;--ink:#e8edf1;--soft:#9aa9b5;--blue:#6b95ff;--line:#2b3946;--ok:#4cc27a;--err:#ff8a80;color-scheme:dark}}
+html{height:100%}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Archivo,system-ui,sans-serif;line-height:1.5}
+header{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1rem 5vw;border-bottom:1px solid var(--line)}
+.marca{font-weight:800;font-size:1.2rem}
+header small{display:block;color:var(--soft);font-weight:400;font-size:.8rem}
+nav a{margin-left:1rem;color:var(--soft);text-decoration:none}
+nav a:hover{color:var(--blue)}
+section{padding:2.5rem 5vw;max-width:1000px;margin:auto}
+h1{font-size:clamp(1.9rem,6vw,3.2rem);line-height:1.1;font-weight:800;max-width:18ch;margin:0 0 1rem}
+h2{font-size:1.5rem;margin:0 0 1rem}
+p.sub{color:var(--soft);max-width:55ch}
+input,select,textarea{width:100%;padding:.7rem;border:1px solid var(--line);border-radius:6px;font:inherit;background:var(--card);color:var(--ink)}
+button{padding:.7rem 1.2rem;border:0;border-radius:6px;background:var(--blue);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.row{display:flex;gap:.5rem;max-width:480px;margin:1.2rem 0}
+.passos{list-style:none;padding:0;margin:1rem 0;display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+.passos li{padding-top:.5rem;border-top:6px solid var(--line);font-size:.8rem;color:var(--soft)}
+.passos li.f{border-color:var(--ok);color:var(--ink)}
+.passos li.a{border-color:var(--blue);color:var(--ink);font-weight:800}
+.filtros{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.filtros button{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.filtros button.on{background:var(--ink);color:var(--bg)}
+.grelha{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem}
+.card small{color:var(--soft)}.card h3{margin:.2rem 0}.card strong{display:block;margin-top:.5rem;font-size:1.2rem}
+form.g{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+form.g label{display:grid;gap:.3rem;font-weight:600}
+.w{grid-column:1/-1}
+.ok{color:var(--ok)}.er{color:var(--err)}
+table{width:100%;border-collapse:collapse;background:var(--card)}
+th,td{text-align:left;padding:.5rem;border-bottom:1px solid var(--line);font-size:.85rem;vertical-align:top}
+footer{padding:2rem 5vw;color:var(--soft);border-top:1px solid var(--line)}
+.oculto{display:none}
+@media(max-width:640px){form.g{grid-template-columns:1fr}.passos{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="marca">Oficina Rápida<small>Proprietário: Pedro Daniel Nhacale</small></div>
+  <nav><a href="#servicos">Serviços</a><a href="#pedido">Pedir reparação</a><a href="#gestao" id="lg">Gestão</a></nav>
+</header>
+
+<div id="publico">
+<section>
+  <h1>Seu aparelho avariado? Acompanhe a reparação passo a passo.</h1>
+  <p class="sub">Reparamos telefones, computadores e PlayStation. Digite o código do seu pedido e veja onde está o seu aparelho.</p>
+  <form class="row" id="fr"><input id="cod" placeholder="Ex.: RP-12345" aria-label="Código do pedido" required><button>Ver estado</button></form>
+  <div id="res" aria-live="polite"></div>
+</section>
+
+<section id="servicos">
+  <h2>Serviços e preços</h2>
+  <div class="filtros" id="fil"></div>
+  <div class="grelha" id="lista"></div>
+</section>
+
+<section id="pedido">
+  <h2>Pedir uma reparação</h2>
+  <form class="g" id="fp">
+    <label>Nome<input name="nome" required></label>
+    <label>Telefone / WhatsApp<input name="telefone" type="tel" required></label>
+    <label>Aparelho<input name="aparelho" placeholder="Ex.: Samsung A12, HP 250, PS4" required></label>
+    <label>Serviço<select name="servico" id="sel"></select></label>
+    <label class="w">Qual é o problema?<textarea name="problema" rows="4" required></textarea></label>
+    <button class="w">Enviar pedido</button>
+    <p class="w" id="msg" aria-live="polite"></p>
+  </form>
+</section>
+</div>
+
+<div id="gestao" class="oculto">
+<section>
+  <h2>Gestão — Pedro Daniel Nhacale</h2>
+  <form class="row" id="fl"><input id="senha" type="password" placeholder="Senha de administrador" required><button>Entrar</button></form>
+  <p id="aviso" class="er"></p>
+  <div id="painel" class="oculto">
+    <h2>Pedidos</h2>
+    <div style="overflow-x:auto"><table><thead><tr><th>Código</th><th>Cliente</th><th>Aparelho</th><th>Problema</th><th>Estado</th></tr></thead><tbody id="ped"></tbody></table></div>
+    <h2 style="margin-top:2rem">Serviços</h2>
+    <form class="row" id="fn" style="max-width:none;flex-wrap:wrap">
+      <select name="categoria" style="width:auto"><option>Telefone</option><option>Computador</option><option>PlayStation</option></select>
+      <input name="nome" placeholder="Nome do serviço" required style="width:auto"><input name="preco" type="number" placeholder="Preço (MT)" required style="width:auto">
+      <input name="prazo" placeholder="Prazo" required style="width:auto"><button>Adicionar</button>
+    </form>
+    <div class="grelha" id="adm"></div>
+  </div>
+</section>
+</div>
+
+<footer>Oficina Rápida · Proprietário: Pedro Daniel Nhacale · Segunda a sábado, 8h–18h</footer>
+
+<script>
+const $=s=>document.querySelector(s), SENHA="admin123",
+ESTADOS=["Recebido","Em diagnóstico","Em reparação","Pronto para levantar","Entregue"];
+const PADRAO=[
+ {id:1,categoria:"Telefone",nome:"Troca de ecrã",preco:1500,prazo:"1 dia"},
+ {id:2,categoria:"Telefone",nome:"Troca de bateria",preco:800,prazo:"2 horas"},
+ {id:3,categoria:"Computador",nome:"Formatação e programas",preco:1000,prazo:"1 dia"},
+ {id:4,categoria:"Computador",nome:"Limpeza e pasta térmica",preco:700,prazo:"2 horas"},
+ {id:5,categoria:"PlayStation",nome:"Limpeza e troca de pasta",preco:1200,prazo:"1 dia"},
+ {id:6,categoria:"PlayStation",nome:"Reparação de comando",preco:600,prazo:"2 dias"}];
+let mem={servicos:PADRAO,pedidos:[]};
+function ler(k){try{const v=localStorage.getItem("oficina_"+k);if(v)mem[k]=JSON.parse(v)}catch(e){}return mem[k]}
+function gravar(k,v){mem[k]=v;try{localStorage.setItem("oficina_"+k,JSON.stringify(v))}catch(e){}}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let filtro="Todos";
+
+function servicos(){
+  const s=ler("servicos"),cats=["Todos",...new Set(s.map(x=>x.categoria))];
+  $("#fil").innerHTML=cats.map(c=>`<button class="${c===filtro?"on":""}" data-c="${c}">${c}</button>`).join("");
+  $("#lista").innerHTML=s.filter(x=>filtro==="Todos"||x.categoria===filtro).map(x=>`<article class="card"><small>${esc(x.categoria)}</small><h3>${esc(x.nome)}</h3><small>Prazo: ${esc(x.prazo)}</small><strong>${esc(x.preco)} MT</strong></article>`).join("");
+  $("#sel").innerHTML='<option value="">Não sei, preciso de diagnóstico</option>'+s.map(x=>`<option>${esc(x.categoria)} — ${esc(x.nome)}</option>`).join("");
+}
+$("#fil").onclick=e=>{if(e.target.dataset.c){filtro=e.target.dataset.c;servicos()}};
+
+$("#fr").onsubmit=e=>{e.preventDefault();
+  const p=ler("pedidos").find(x=>x.codigo===$("#cod").value.toUpperCase().trim());
+  if(!p){$("#res").innerHTML='<p class="er">Código não encontrado.</p>';return}
+  const i=ESTADOS.indexOf(p.estado);
+  $("#res").innerHTML=`<p><strong>${esc(p.aparelho)}</strong>: ${p.estado}</p><ol class="passos">`+ESTADOS.map((s,n)=>`<li class="${n<i?"f":n===i?"a":""}">${s}</li>`).join("")+"</ol>";
+};
+
+$("#fp").onsubmit=e=>{e.preventDefault();
+  const d=Object.fromEntries(new FormData(e.target)),p=ler("pedidos");
+  d.codigo="RP-"+String(Math.floor(10000+Math.random()*90000));
+  d.estado=ESTADOS[0];d.criado=new Date().toLocaleString("pt-PT");
+  p.push(d);gravar("pedidos",p);
+  $("#msg").className="w ok";$("#msg").textContent="Pedido enviado. Guarde o seu código: "+d.codigo;e.target.reset();
+};
+
+function painel(){
+  const p=ler("pedidos").slice().reverse();
+  $("#ped").innerHTML=p.map(x=>`<tr><td>${x.codigo}</td><td>${esc(x.nome)}<br>${esc(x.telefone)}</td><td>${esc(x.aparelho)}<br><small>${esc(x.servico)}</small></td><td>${esc(x.problema)}</td><td><select data-c="${x.codigo}">${ESTADOS.map(s=>`<option ${s===x.estado?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("")||'<tr><td colspan="5">Ainda não há pedidos.</td></tr>';
+  $("#adm").innerHTML=ler("servicos").map(x=>`<article class="card"><small>${esc(x.categoria)}</small><h3>${esc(x.nome)}</h3><strong>${esc(x.preco)} MT</strong><button data-d="${x.id}" style="margin-top:.5rem">Apagar</button></article>`).join("");
+}
+$("#fl").onsubmit=e=>{e.preventDefault();
+  if($("#senha").value!==SENHA){$("#aviso").textContent="Senha incorreta.";return}
+  $("#aviso").textContent="";$("#painel").classList.remove("oculto");painel();
+};
+$("#ped").onchange=e=>{const p=ler("pedidos");p.forEach(x=>{if(x.codigo===e.target.dataset.c)x.estado=e.target.value});gravar("pedidos",p)};
+$("#fn").onsubmit=e=>{e.preventDefault();
+  const d=Object.fromEntries(new FormData(e.target)),s=ler("servicos");
+  s.push({id:Date.now(),categoria:d.categoria,nome:d.nome,preco:Number(d.preco),prazo:d.prazo});
+  gravar("servicos",s);e.target.reset();painel();servicos();
+};
+$("#adm").onclick=e=>{if(e.target.dataset.d){gravar("servicos",ler("servicos").filter(x=>String(x.id)!==e.target.dataset.d));painel();servicos()}};
+
+function rota(){const g=location.hash==="#gestao";$("#publico").classList.toggle("oculto",g);$("#gestao").classList.toggle("oculto",!g)}
+addEventListener("hashchange",rota);rota();servicos();
+</script>
+</body>
+</html>
